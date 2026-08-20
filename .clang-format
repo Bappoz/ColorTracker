@@ -1,0 +1,12 @@
+BasedOnStyle: Google
+Language: Cpp
+Standard: c++17
+ColumnLimit: 100
+IndentWidth: 4
+AccessModifierOffset: -4
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortCaseLabelsOnASingleLine: true
+DerivePointerAlignment: false
+PointerAlignment: Left
+IncludeBlocks: Preserve

@@ -1,0 +1,14 @@
+build/
+build-*/
+compile_commands.json
+.cache/
+
+# ESP-IDF
+sdkconfig
+sdkconfig.old
+managed_components/
+
+# Capturas e dumps de depuração
+*.ppm
+!docs/**/*.ppm
+captures/
