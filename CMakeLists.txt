@@ -11,6 +11,7 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif()
 
 option(ECV_BUILD_TESTS "Compila os testes" ON)
+option(ECV_BUILD_APPS "Compila as aplicações de linha de comando" ON)
 option(ECV_WITH_V4L2 "Compila a fonte de frames V4L2 (Linux/RPi)" ${UNIX})
 option(ECV_NATIVE_ARCH "Otimiza para a CPU do host (não usar em build de release cruzado)" OFF)
 
@@ -45,6 +46,10 @@ target_compile_options(ecv_platform PRIVATE -Wall -Wextra -Wpedantic)
 if(ECV_WITH_V4L2 AND UNIX AND NOT APPLE)
   target_sources(ecv_platform PRIVATE platform/linux/v4l2_source.cpp platform/linux/pwm_sink.cpp)
   target_compile_definitions(ecv_platform PUBLIC ECV_HAS_V4L2=1)
+endif()
+
+if(ECV_BUILD_APPS)
+  add_subdirectory(apps)
 endif()
 
 if(ECV_BUILD_TESTS)
