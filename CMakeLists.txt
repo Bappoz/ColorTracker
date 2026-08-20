@@ -22,6 +22,7 @@ add_library(ecv_core STATIC
   src/vision/morphology.cpp
   src/vision/blobs.cpp
   src/vision/linescan.cpp
+  src/vision/calibrate.cpp
 )
 target_include_directories(ecv_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_options(ecv_core PRIVATE -Wall -Wextra -Wpedantic -Wshadow -Wconversion)
