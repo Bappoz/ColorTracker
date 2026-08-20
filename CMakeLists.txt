@@ -30,3 +30,12 @@ target_compile_options(ecv_core PRIVATE -Wall -Wextra -Wpedantic -Wshadow -Wconv
 if(ECV_NATIVE_ARCH)
   target_compile_options(ecv_core PUBLIC -march=native)
 endif()
+
+# Camada de plataforma para host/RPi (usa STL e syscalls — fora do ecv_core).
+add_library(ecv_platform STATIC
+  platform/sim/ppm_io.cpp
+  platform/sim/scene_source.cpp
+)
+target_link_libraries(ecv_platform PUBLIC ecv_core)
+target_include_directories(ecv_platform PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/platform)
+target_compile_options(ecv_platform PRIVATE -Wall -Wextra -Wpedantic)
