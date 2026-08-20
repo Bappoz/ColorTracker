@@ -18,6 +18,7 @@ add_library(ecv_core STATIC
   src/core/types.cpp
   src/core/profile.cpp
   src/vision/color.cpp
+  src/vision/threshold.cpp
 )
 target_include_directories(ecv_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_options(ecv_core PRIVATE -Wall -Wextra -Wpedantic -Wshadow -Wconversion)
