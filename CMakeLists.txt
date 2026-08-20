@@ -17,6 +17,7 @@ option(ECV_NATIVE_ARCH "Otimiza para a CPU do host (não usar em build de releas
 add_library(ecv_core STATIC
   src/core/types.cpp
   src/core/profile.cpp
+  src/vision/color.cpp
 )
 target_include_directories(ecv_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_options(ecv_core PRIVATE -Wall -Wextra -Wpedantic -Wshadow -Wconversion)
