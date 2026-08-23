@@ -12,3 +12,4 @@ managed_components/
 *.ppm
 !docs/**/*.ppm
 captures/
+CLAUDE.md
