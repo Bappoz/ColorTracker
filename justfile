@@ -86,6 +86,10 @@ rpi-logs:
 rpi-shell:
     ssh {{pi}}
 
+# Acha o IP da placa na rede atual (mDNS, e se falhar varre procurando o MAC)
+rpi-find:
+    ./scripts/find_pi.sh
+
 fmt:
     fd -e cpp -e hpp . include src platform apps tests -x clang-format -i
 

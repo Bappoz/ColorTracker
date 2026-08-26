@@ -112,4 +112,5 @@ Os binários são estáticos: não há dependência para instalar na placa.
 | `Permission denied` no `/dev/video0` | falta o grupo: `sudo usermod -aG video $USER` e religue a sessão |
 | câmera ocupada | o serviço está segurando: `systemctl --user stop ecv-sumo` |
 | latência disparou | veja `vcgencmd get_throttled`; `0x4` = clock caiu por calor/tensão |
-| `ssh sumo` não resolve | use o IP direto; o mDNS `pi-pedro.local` cai quando a rede muda |
+| `ssh sumo` não resolve | do notebook: `just rpi-find` acha o IP na rede atual |
+| trocou de rede/hotspot | a placa reconecta sozinha em qualquer SSID já salvo (`nmcli con show`); o IP muda, o nome `pi-pedro.local` não |
