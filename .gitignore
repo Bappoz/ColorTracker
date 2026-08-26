@@ -8,6 +8,9 @@ sdkconfig
 sdkconfig.old
 managed_components/
 
+# Saída de benchmark (CSV/JSON gerados por ecv_soak)
+bench-out/
+
 # Capturas e dumps de depuração
 *.ppm
 !docs/**/*.ppm

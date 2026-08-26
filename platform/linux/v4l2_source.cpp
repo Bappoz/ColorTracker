@@ -227,12 +227,20 @@ bool V4l2Source::next(ImageView& out) {
         queued_index_ = -1;
     }
 
-    fd_set fds;
-    FD_ZERO(&fds);
-    FD_SET(fd_, &fds);
-    timeval tv{};
-    tv.tv_sec = 2;
-    if (::select(fd_ + 1, &fds, nullptr, nullptr, &tv) <= 0) return fail("select");
+    // select também acorda com EINTR quando chega sinal (SIGTERM do systemd, por
+    // exemplo). Tratar isso como falha fazia o robô sair com erro em vez de
+    // encerrar limpo — reenviar, como xioctl já faz.
+    int ready;
+    do {
+        fd_set fds;
+        FD_ZERO(&fds);
+        FD_SET(fd_, &fds);
+        timeval tv{};
+        tv.tv_sec = 2;
+        ready = ::select(fd_ + 1, &fds, nullptr, nullptr, &tv);
+    } while (ready == -1 && errno == EINTR);
+    if (ready == 0) return fail("select expirou: a câmera parou de entregar frames");
+    if (ready < 0) return fail("select");
 
     v4l2_buffer buf{};
     buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;

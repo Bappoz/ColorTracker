@@ -1,0 +1,19 @@
+[Unit]
+Description=ECV — laço de visão do robô de sumô
+Documentation=file:%h/ecv/RUNBOOK.md
+After=multi-user.target
+
+[Service]
+Type=simple
+# robot.env controla os argumentos sem precisar editar a unit.
+# Padrão seguro: --dry-run (processa a câmera, não aciona motor).
+EnvironmentFile=%h/ecv/robot.env
+ExecStart=/bin/sh -c 'exec %h/ecv/bin/ecv_sumo_robot $ECV_ROBOT_ARGS'
+WorkingDirectory=%h/ecv
+Restart=on-failure
+RestartSec=2
+# O laço de visão perde deadline se disputar CPU com tarefa de fundo.
+Nice=-5
+
+[Install]
+WantedBy=default.target

@@ -107,6 +107,8 @@ int main(int argc, char** argv) {
 
     while (g_running) {
         if (!camera.next(frame)) {
+            // Sinal no meio da captura é encerramento pedido, não falha.
+            if (!g_running) break;
             std::fprintf(stderr, "captura falhou: %s\n", camera.last_error().c_str());
             exit_code = 1;
             break;

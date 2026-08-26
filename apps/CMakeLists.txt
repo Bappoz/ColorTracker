@@ -7,7 +7,10 @@ target_link_libraries(ecv_sumo_sim PRIVATE ecv_platform)
 add_executable(ecv_calibrate calibrate/main.cpp)
 target_link_libraries(ecv_calibrate PRIVATE ecv_platform)
 
-set(ecv_app_targets ecv_bench ecv_sumo_sim ecv_calibrate)
+add_executable(ecv_soak soak/main.cpp)
+target_link_libraries(ecv_soak PRIVATE ecv_platform)
+
+set(ecv_app_targets ecv_bench ecv_sumo_sim ecv_calibrate ecv_soak)
 
 # Só existem onde a camada V4L2/sysfs foi compilada.
 if(ECV_WITH_V4L2 AND UNIX AND NOT APPLE)
