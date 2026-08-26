@@ -1,4 +1,6 @@
 build_dir := "build"
+# Alvo do Raspberry Pi: alias de ~/.ssh/config. Sobrescreva com ECV_PI=usuario@ip
+pi := env_var_or_default("ECV_PI", "sumo")
 
 default:
     @just --list
@@ -41,6 +43,48 @@ cam-calibrate *ARGS:
 # Loop do robô no Raspberry Pi (--dry-run não aciona os motores)
 robot *ARGS:
     ./{{build_dir}}/apps/ecv_sumo_robot {{ARGS}}
+
+# Robô inteiro por fases (busca->oclusao->borda->recalibracao) com estatística
+soak *ARGS:
+    ./{{build_dir}}/apps/ecv_soak {{ARGS}}
+
+# Build cruzado para Raspberry Pi 3 com SO 64 bits (binário estático)
+rpi-build:
+    cmake -S . -B build-rpi3 -DCMAKE_TOOLCHAIN_FILE=cmake/aarch64-rpi3.cmake \
+      -DCMAKE_BUILD_TYPE=Release
+    cmake --build build-rpi3 -j
+
+# Copia para a placa, roda testes + soak + bench e traz CSV/JSON de volta
+rpi-bench target frames="400":
+    ./scripts/rpi_bench.sh {{target}} {{frames}}
+
+# "Grava" na placa: build cruzado + envio + reinício do serviço (o flash da ESP32)
+rpi-flash:
+    ./scripts/rpi_deploy.sh {{pi}} --restart
+
+# Primeira vez numa placa nova: envia tudo e instala o serviço de boot
+rpi-install:
+    ./scripts/rpi_deploy.sh {{pi}} --service
+
+# Bateria extrema na placa (telemetria + fases + pior caso + câmera)
+rpi-stress *ARGS:
+    ssh {{pi}} "~/ecv/ecv-stress.sh {{ARGS}}"
+
+# Traz tudo que a placa produziu para bench-out/pi/
+rpi-pull:
+    mkdir -p bench-out/pi
+    scp -q {{pi}}:ecv/out/'*' bench-out/pi/ && ls -la bench-out/pi/
+
+# Câmera na placa sem preview: throughput real de captura + visão
+rpi-cam seconds="30":
+    ssh {{pi}} "~/ecv/bin/ecv_probe --no-preview --seconds {{seconds}} --log ~/ecv/out/cam.csv"
+
+# Log do serviço ao vivo
+rpi-logs:
+    ssh {{pi}} "journalctl --user -u ecv-sumo -f"
+
+rpi-shell:
+    ssh {{pi}}
 
 fmt:
     fd -e cpp -e hpp . include src platform apps tests -x clang-format -i
