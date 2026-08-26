@@ -48,6 +48,13 @@ if(ECV_WITH_V4L2 AND UNIX AND NOT APPLE)
   target_compile_definitions(ecv_platform PUBLIC ECV_HAS_V4L2=1)
 endif()
 
+# CPU/temperatura/frequência via procfs+sysfs. Independe do V4L2: o relatório de
+# desempenho roda em máquina sem câmera nenhuma.
+if(UNIX AND NOT APPLE)
+  target_sources(ecv_platform PRIVATE platform/linux/sysmetrics.cpp)
+  target_compile_definitions(ecv_platform PUBLIC ECV_HAS_SYSMETRICS=1)
+endif()
+
 if(ECV_BUILD_APPS)
   add_subdirectory(apps)
 endif()
