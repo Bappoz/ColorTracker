@@ -1,0 +1,37 @@
+{
+  "host": {"model": "Raspberry Pi 3 Model B Rev 1.2", "ncpu": 4},
+  "config": {"width": 320, "height": 240, "format": "rgb565", "frames_per_phase": 400, "total_frames": 2800},
+  "footprint_bytes": 98116,
+  "lut_build_us": 2547,
+  "wall_s": 12.96,
+  "cpu_proc_pct": 99.9,
+  "cpu_machine_pct": 25.9,
+  "temp_c": 52.6,
+  "freq_mhz": 1198,
+  "rss_kb": 1468,
+  "overall": {"min_us": 563, "mean_us": 1553.8, "p95": 3455.0, "p99": 3491.0, "max_us": 8203, "stddev_us": 1200.7,
+              "fps_min": 1776.2, "fps_mean": 643.6, "fps_worst": 121.9},
+  "phases": [
+    {"name":"busca","min_us":3375,"mean_us":3450.0,"p95":3485.0,"max_us":8203,"detect_pct":0.0,"searching":400,"tracking":0,"coasting":0,"border_hits":0},
+    {"name":"aquisicao","min_us":574,"mean_us":780.0,"p95":836.0,"max_us":3452,"detect_pct":100.0,"searching":0,"tracking":400,"coasting":0,"border_hits":0},
+    {"name":"perseguicao","min_us":570,"mean_us":765.0,"p95":835.1,"max_us":993,"detect_pct":100.0,"searching":0,"tracking":400,"coasting":0,"border_hits":0},
+    {"name":"oclusao","min_us":786,"mean_us":3427.6,"p95":3477.1,"max_us":3662,"detect_pct":0.0,"searching":377,"tracking":0,"coasting":23,"border_hits":0},
+    {"name":"reaquisicao","min_us":563,"mean_us":769.7,"p95":830.0,"max_us":3421,"detect_pct":100.0,"searching":0,"tracking":400,"coasting":0,"border_hits":0},
+    {"name":"borda","min_us":635,"mean_us":839.8,"p95":905.0,"max_us":975,"detect_pct":100.0,"searching":0,"tracking":400,"coasting":0,"border_hits":400},
+    {"name":"recalibracao","min_us":640,"mean_us":844.9,"p95":921.0,"max_us":1099,"detect_pct":100.0,"searching":0,"tracking":400,"coasting":0,"border_hits":400}
+  ],
+  "stages": [
+    {"name":"border","mean_us":20.4,"max_us":126,"share_pct":1.3},
+    {"name":"threshold","mean_us":448.1,"max_us":2671,"share_pct":28.9},
+    {"name":"morphology","mean_us":932.6,"max_us":4670,"share_pct":60.1},
+    {"name":"blobs","mean_us":150.6,"max_us":853,"share_pct":9.7},
+    {"name":"track","mean_us":0.6,"max_us":14,"share_pct":0.0},
+    {"name":"control","mean_us":0.5,"max_us":4,"share_pct":0.0}
+  ],
+  "sweep": [
+    {"width":160,"height":120,"pixels":19200,"mean_us":619.6,"p95_us":867.0,"max_us":1932,"fps_mean":1613.8},
+    {"width":320,"height":240,"pixels":76800,"mean_us":1593.2,"p95_us":3555.0,"max_us":5569,"fps_mean":627.7},
+    {"width":480,"height":360,"pixels":172800,"mean_us":3156.5,"p95_us":7748.0,"max_us":8470,"fps_mean":316.8},
+    {"width":640,"height":480,"pixels":307200,"mean_us":5180.0,"p95_us":13781.0,"max_us":15536,"fps_mean":193.1}
+  ]
+}

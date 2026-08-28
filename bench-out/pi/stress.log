@@ -1,0 +1,1570 @@
+
+===== [0s] setup — contexto
+--- modelo ---
+Raspberry Pi 3 Model B Rev 1.2
+--- kernel ---
+Linux pi-pedro 6.18.39+rpt-rpi-v8 #1 SMP PREEMPT Debian 1:6.18.39-1+rpt1 (2026-07-29) aarch64 GNU/Linux
+--- governor ---
+ondemand
+--- throttled inicial ---
+throttled=0x0
+--- câmeras ---
+/dev/video0
+/dev/video1
+/dev/video10
+/dev/video11
+/dev/video12
+/dev/video13
+/dev/video14
+/dev/video15
+/dev/video16
+/dev/video18
+/dev/video20
+/dev/video21
+/dev/video22
+/dev/video23
+/dev/video31
+/dev/video0 — 36 modos (marcados com * o núcleo decodifica)
+  YUYV  640x480   30 fps *
+  YUYV  160x90    30 fps *
+  YUYV  160x120   30 fps *
+  YUYV  176x144   30 fps *
+  YUYV  320x180   30 fps *
+  YUYV  320x240   30 fps *
+  YUYV  352x288   30 fps *
+  YUYV  432x240   30 fps *
+  YUYV  640x360   30 fps *
+  YUYV  800x448   30 fps *
+  YUYV  800x600   24 fps *
+  YUYV  864x480   24 fps *
+  YUYV  960x720   15 fps *
+  YUYV 1024x576   15 fps *
+  YUYV 1280x720   10 fps *
+  YUYV 1600x896    7 fps *
+  YUYV 1920x1080   5 fps *
+  YUYV 2304x1296   2 fps *
+  YUYV 2304x1536   2 fps *
+  MJPG  640x480   30 fps 
+  MJPG  160x90    30 fps 
+  MJPG  160x120   30 fps 
+  MJPG  176x144   30 fps 
+  MJPG  320x180   30 fps 
+  MJPG  320x240   30 fps 
+  MJPG  352x288   30 fps 
+  MJPG  432x240   30 fps 
+  MJPG  640x360   30 fps 
+  MJPG  800x448   30 fps 
+
+===== [1s] T0 — baseline ocioso 20s
+
+===== [21s] T1 — soak completo por fases + varredura de resolução
+ECV soak — robô de sumô completo, 400 frames por fase, 7 fases
+alvo: Raspberry Pi 3 Model B Rev 1.2 · 4 núcleos · cenário 320x240 rgb565
+footprint estático SumoStorage<320,240>: 98116 B
+
+Por fase (latência do frame inteiro):
+  fase           frames   min us   média      p95   max us  detec%  busca/trava/coast borda
+  busca             400     3377   3490.5   3574.5     7206    0.0%    400/    0/    0     0
+  aquisicao         400      569    789.5    852.0     3456  100.0%      0/  400/    0     0
+  perseguicao       400      569    775.6    848.0     1003  100.0%      0/  400/    0     0
+  oclusao           400      793   3440.8   3555.9     3708    0.0%    377/    0/   23     0
+  reaquisicao       400      568    780.2    857.0     3443  100.0%      0/  400/    0     0
+  borda             400      640    853.5    925.0     1012  100.0%      0/  400/    0   400
+  recalibracao      400      638    854.0    928.0     1037  100.0%      0/  400/    0   400
+
+Agregado (2800 frames):
+  mínimo        568 us   →   1760.6 Hz  (pico de melhor caso)
+  média      1569.2 us   →    637.3 Hz  (capacidade sustentada)
+  p95        3463.0 us   →    288.8 Hz
+  p99        3599.0 us   →    277.9 Hz
+  máximo       7206 us   →    138.8 Hz  (pior caso garantido)
+  desvio     1213.7 us   (jitter)
+  LUT reconstruída em 2570 us (fase de recalibração)
+
+Estágios (média por frame, sobre todas as fases):
+  border              20.4 us    1.3%  (pior 148 us)
+  threshold          453.2 us   28.9%  (pior 2287 us)
+  morphology         939.1 us   59.9%  (pior 4335 us)
+  blobs              152.4 us    9.7%  (pior 689 us)
+  track                1.2 us    0.1%  (pior 57 us)
+  control              0.8 us    0.1%  (pior 62 us)
+
+Sistema (249 amostras em 13.05 s):
+  CPU do processo     99.9% de um núcleo (25.0% da máquina toda)
+  CPU da máquina      27.5%
+  temperatura máx     58.0 °C
+  frequência média    1198 MHz
+  RSS final           1464 kB
+
+Varredura de resolução (mesmo cenário, 400 frames por fase):
+  resolução  média us     p95 us     max us  Hz médio
+  160x120          620.1      867.0       1054     1612.6
+  320x240         1558.1     3459.0       3785      641.8
+  480x360         3151.0     7742.0       8972      317.4
+  640x480         5210.7    13781.0      15656      191.9
+
+CSV por frame  → /home/pedro/ecv/out/frames.csv
+JSON do resumo → /home/pedro/ecv/out/summary.json
+
+===== [130s] T2 — pior caso 640x480 sustentado (alvo perdido = varredura total)
+ECV soak — robô de sumô completo, 600 frames por fase, 7 fases
+alvo: Raspberry Pi 3 Model B Rev 1.2 · 4 núcleos · cenário 640x480 rgb565
+footprint estático SumoStorage<320,240>: 98116 B
+
+Por fase (latência do frame inteiro):
+  fase           frames   min us   média      p95   max us  detec%  busca/trava/coast borda
+  busca             600    13634  13840.0  14539.8    15537    0.0%    600/    0/    0     0
+  aquisicao         600     1349   1720.4   1836.0    14911  100.0%      0/  600/    0     0
+  perseguicao       600     1343   1686.3   1785.0     2097  100.0%      0/  600/    0     0
+  oclusao           600     1745  13818.3  14447.2    15840    0.0%    577/    0/   23     0
+  reaquisicao       600     1335   1709.4   1822.1    13660  100.0%      0/  600/    0     0
+  borda             600     1469   1840.4   1953.3     2296  100.0%      0/  600/    0   600
+  recalibracao      600     1508   1835.2   1970.1     2385  100.0%      0/  600/    0   600
+
+Agregado (4200 frames):
+  mínimo       1335 us   →    749.1 Hz  (pico de melhor caso)
+  média      5207.2 us   →    192.0 Hz  (capacidade sustentada)
+  p95       13867.1 us   →     72.1 Hz
+  p99       14874.3 us   →     67.2 Hz
+  máximo      15840 us   →     63.1 Hz  (pior caso garantido)
+  desvio     5466.4 us   (jitter)
+  LUT reconstruída em 2542 us (fase de recalibração)
+
+Estágios (média por frame, sobre todas as fases):
+  border              41.3 us    0.8%  (pior 220 us)
+  threshold         1582.9 us   30.4%  (pior 4609 us)
+  morphology        3095.5 us   59.5%  (pior 9979 us)
+  blobs              482.5 us    9.3%  (pior 1542 us)
+  track                1.3 us    0.0%  (pior 33 us)
+  control              0.9 us    0.0%  (pior 74 us)
+
+Sistema (1259 amostras em 75.29 s):
+  CPU do processo     99.9% de um núcleo (25.0% da máquina toda)
+  CPU da máquina      27.6%
+  temperatura máx     62.3 °C
+  frequência média    1200 MHz
+  RSS final           3024 kB
+JSON do resumo → /home/pedro/ecv/out/summary-worst.json
+
+===== [205s] T3 — visão com os outros 3 núcleos saturados
+ECV soak — robô de sumô completo, 400 frames por fase, 7 fases
+alvo: Raspberry Pi 3 Model B Rev 1.2 · 4 núcleos · cenário 320x240 rgb565
+footprint estático SumoStorage<320,240>: 98116 B
+
+Por fase (latência do frame inteiro):
+  fase           frames   min us   média      p95   max us  detec%  busca/trava/coast borda
+  busca             400     3385   3542.9   4136.0     7299    0.0%    400/    0/    0     0
+  aquisicao         400      562    804.7    885.3     3434  100.0%      0/  400/    0     0
+  perseguicao       400      560    779.8    886.0     1669  100.0%      0/  400/    0     0
+  oclusao           400      812   3508.7   3776.9     8123    0.0%    377/    0/   23     0
+  reaquisicao       400      558    786.6    876.1     3412  100.0%      0/  400/    0     0
+  borda             400      628    873.0    971.0     4402  100.0%      0/  400/    0   400
+  recalibracao      400      631    886.4    974.5     5116  100.0%      0/  400/    0   400
+
+Agregado (2800 frames):
+  mínimo        558 us   →   1792.1 Hz  (pico de melhor caso)
+  média      1597.4 us   →    626.0 Hz  (capacidade sustentada)
+  p95        3489.1 us   →    286.6 Hz
+  p99        4345.5 us   →    230.1 Hz
+  máximo       8123 us   →    123.1 Hz  (pior caso garantido)
+  desvio     1254.7 us   (jitter)
+  LUT reconstruída em 2578 us (fase de recalibração)
+
+Estágios (média por frame, sobre todas as fases):
+  border              21.7 us    1.4%  (pior 3307 us)
+  threshold          466.6 us   29.2%  (pior 4824 us)
+  morphology         953.6 us   59.8%  (pior 6763 us)
+  blobs              152.8 us    9.6%  (pior 1950 us)
+  track                0.7 us    0.0%  (pior 5 us)
+  control              0.5 us    0.0%  (pior 4 us)
+
+Sistema (254 amostras em 13.37 s):
+  CPU do processo     97.4% de um núcleo (24.3% da máquina toda)
+  CPU da máquina     100.0%
+  temperatura máx     73.1 °C
+  frequência média    1200 MHz
+  RSS final           1464 kB
+JSON do resumo → /home/pedro/ecv/out/summary-contended.json
+
+===== [224s] T4 — câmera real headless por 45s
+TRACKING  alvo=(149,228) area=   175 erro=-0.069 L=+0.49 R=+0.63  5438 us  3.4 fps  TRACKING  alvo=(150,228) area=   187 erro=-0.062 L=+0.50 R=+0.63   549 us  6.2 fps  COASTING  alvo=(150,228) area=     0 erro=-0.062 L=+0.50 R=+0.63   538 us  8.4 fps  COASTING  alvo=(150,228) area=     0 erro=-0.062 L=+0.50 R=+0.63  5201 us  10.6 fps  COASTING  alvo=(150,228) area=     0 erro=-0.062 L=+0.50 R=+0.63  5599 us  12.7 fps  COASTING  alvo=(150,228) area=     0 erro=-0.062 L=+0.50 R=+0.63  5317 us  14.2 fps  COASTING  alvo=(150,228) area=     0 erro=-0.062 L=+0.50 R=+0.63  5177 us  15.9 fps  COASTING  alvo=(150,228) area=     0 erro=-0.062 L=+0.50 R=+0.63  5205 us  17.5 fps  COASTING  alvo=(151,228) area=     0 erro=-0.056 L=+0.51 R=+0.63  5262 us  18.5 fps  COASTING  alvo=(151,228) area=     0 erro=-0.056 L=+0.51 R=+0.63  5161 us  19.8 fps  COASTING  alvo=(151,228) area=     0 erro=-0.056 L=+0.51 R=+0.63  5212 us  20.9 fps  COASTING  alvo=(151,228) area=     0 erro=-0.056 L=+0.51 R=+0.63  5256 us  21.6 fps  COASTING  alvo=(151,228) area=     0 erro=-0.056 L=+0.51 R=+0.63  5170 us  22.6 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  5135 us  23.4 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  5192 us  23.9 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  5186 us  24.6 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  5161 us  25.3 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  5143 us  25.5 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8918 us  26.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8961 us  26.6 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8950 us  26.7 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7809 us  27.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7828 us  27.6 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7835 us  27.6 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7851 us  28.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7839 us  28.3 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7808 us  28.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7754 us  28.5 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7841 us  28.8 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7767 us  28.7 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7788 us  29.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7754 us  29.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7887 us  29.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7892 us  29.3 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7800 us  29.5 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8238 us  29.3 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8491 us  29.5 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8293 us  29.7 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7803 us  29.5 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7829 us  29.7 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7840 us  29.8 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7826 us  29.6 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7861 us  29.8 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7755 us  29.9 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7820 us  29.7 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9007 us  29.9 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8989 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8893 us  29.8 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7957 us  29.9 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7831 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7790 us  29.8 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7791 us  30.0 fps  TRACKING  alvo=(144,232) area=   155 erro=-0.100 L=+0.45 R=+0.65  7955 us  30.1 fps  TRACKING  alvo=(145,231) area=   162 erro=-0.094 L=+0.46 R=+0.64   765 us  29.9 fps  TRACKING  alvo=(143,229) area=   189 erro=-0.106 L=+0.44 R=+0.65   767 us  30.0 fps  TRACKING  alvo=(140,225) area=   159 erro=-0.125 L=+0.41 R=+0.66   919 us  30.1 fps  TRACKING  alvo=(137,219) area=   152 erro=-0.144 L=+0.38 R=+0.67   966 us  29.9 fps  COASTING  alvo=(136,217) area=     0 erro=-0.150 L=+0.37 R=+0.67  1169 us  30.0 fps  COASTING  alvo=(135,215) area=     0 erro=-0.156 L=+0.36 R=+0.67  10444 us  30.1 fps  TRACKING  alvo=(129,205) area=   156 erro=-0.194 L=+0.30 R=+0.69  10384 us  29.9 fps  TRACKING  alvo=(125,200) area=   165 erro=-0.219 L=+0.26 R=+0.70  1372 us  30.0 fps  TRACKING  alvo=(124,196) area=   167 erro=-0.225 L=+0.25 R=+0.70  1233 us  30.2 fps  COASTING  alvo=(121,192) area=     0 erro=-0.244 L=+0.22 R=+0.71  1280 us  29.9 fps  COASTING  alvo=(119,189) area=     0 erro=-0.256 L=+0.21 R=+0.72  9074 us  30.1 fps  COASTING  alvo=(117,185) area=     0 erro=-0.269 L=+0.19 R=+0.72  9031 us  30.2 fps  COASTING  alvo=(115,182) area=     0 erro=-0.281 L=+0.17 R=+0.73  8885 us  29.9 fps  COASTING  alvo=(113,178) area=     0 erro=-0.294 L=+0.15 R=+0.74  8397 us  30.1 fps  COASTING  alvo=(110,175) area=     0 erro=-0.312 L=+0.12 R=+0.74  7896 us  30.2 fps  COASTING  alvo=(108,171) area=     0 erro=-0.325 L=+0.10 R=+0.75  8576 us  29.9 fps  COASTING  alvo=(106,167) area=     0 erro=-0.338 L=+0.08 R=+0.76  7814 us  30.1 fps  COASTING  alvo=(104,164) area=     0 erro=-0.350 L=+0.06 R=+0.76  6928 us  30.2 fps  COASTING  alvo=(101,160) area=     0 erro=-0.369 L=+0.03 R=+0.77  6941 us  30.0 fps  COASTING  alvo=( 99,156) area=     0 erro=-0.381 L=+0.01 R=+0.78  7893 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9014 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8937 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9134 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7769 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7806 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7772 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7785 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7792 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7802 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7905 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7905 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7876 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7876 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7811 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7798 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7797 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7761 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7774 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8959 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9202 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8966 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7841 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7822 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7820 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7780 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7828 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7860 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8330 us  30.2 fps  TRACKING  alvo=(177,119) area=   232 erro=+0.106 L=+0.65 R=+0.44  8104 us  30.0 fps  TRACKING  alvo=(177,119) area=   231 erro=+0.106 L=+0.65 R=+0.44  1416 us  30.1 fps  COASTING  alvo=(177,119) area=     0 erro=+0.106 L=+0.65 R=+0.44  1405 us  30.2 fps  COASTING  alvo=(177,119) area=     0 erro=+0.106 L=+0.65 R=+0.44  7882 us  30.0 fps  COASTING  alvo=(177,119) area=     0 erro=+0.106 L=+0.65 R=+0.44  7776 us  30.1 fps  COASTING  alvo=(177,119) area=     0 erro=+0.106 L=+0.65 R=+0.44  8922 us  30.2 fps  COASTING  alvo=(177,119) area=     0 erro=+0.106 L=+0.65 R=+0.44  8993 us  30.0 fps  COASTING  alvo=(177,119) area=     0 erro=+0.106 L=+0.65 R=+0.44  8937 us  30.1 fps  COASTING  alvo=(177,120) area=     0 erro=+0.106 L=+0.65 R=+0.44  7776 us  30.2 fps  COASTING  alvo=(177,120) area=     0 erro=+0.106 L=+0.65 R=+0.44  7795 us  30.0 fps  COASTING  alvo=(177,120) area=     0 erro=+0.106 L=+0.65 R=+0.44  7803 us  30.1 fps  COASTING  alvo=(177,120) area=     0 erro=+0.106 L=+0.65 R=+0.44  8976 us  30.2 fps  COASTING  alvo=(177,120) area=     0 erro=+0.106 L=+0.65 R=+0.44  9143 us  30.0 fps  COASTING  alvo=(177,120) area=     0 erro=+0.106 L=+0.65 R=+0.44  8922 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7906 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7932 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7780 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7882 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7804 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7804 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7773 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7878 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7869 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7935 us  30.2 fps  TRACKING  alvo=(196,159) area=   169 erro=+0.225 L=+0.70 R=+0.25  8212 us  30.0 fps  TRACKING  alvo=(196,156) area=   266 erro=+0.225 L=+0.70 R=+0.25  1373 us  30.1 fps  TRACKING  alvo=(193,152) area=   201 erro=+0.206 L=+0.69 R=+0.28  1941 us  30.2 fps  TRACKING  alvo=(199,164) area=   200 erro=+0.244 L=+0.71 R=+0.22  1657 us  30.0 fps  TRACKING  alvo=(201,171) area=   185 erro=+0.256 L=+0.72 R=+0.21  1656 us  30.1 fps  TRACKING  alvo=(201,175) area=   176 erro=+0.256 L=+0.72 R=+0.21  1583 us  30.2 fps  TRACKING  alvo=(200,177) area=   162 erro=+0.250 L=+0.72 R=+0.22  1652 us  30.0 fps  COASTING  alvo=(200,180) area=     0 erro=+0.250 L=+0.72 R=+0.22  1664 us  30.1 fps  COASTING  alvo=(201,182) area=     0 erro=+0.256 L=+0.72 R=+0.21  8308 us  30.2 fps  COASTING  alvo=(202,186) area=     0 erro=+0.262 L=+0.72 R=+0.20  7839 us  30.0 fps  COASTING  alvo=(202,188) area=     0 erro=+0.262 L=+0.72 R=+0.20  7822 us  30.1 fps  COASTING  alvo=(203,191) area=     0 erro=+0.269 L=+0.72 R=+0.19  7795 us  30.2 fps  COASTING  alvo=(203,194) area=     0 erro=+0.269 L=+0.72 R=+0.19  7804 us  30.0 fps  COASTING  alvo=(204,197) area=     0 erro=+0.275 L=+0.73 R=+0.18  7773 us  30.1 fps  COASTING  alvo=(204,200) area=     0 erro=+0.275 L=+0.73 R=+0.18  8866 us  30.2 fps  COASTING  alvo=(205,203) area=     0 erro=+0.281 L=+0.73 R=+0.17  8972 us  30.0 fps  COASTING  alvo=(205,206) area=     0 erro=+0.281 L=+0.73 R=+0.17  9028 us  30.1 fps  COASTING  alvo=(206,209) area=     0 erro=+0.287 L=+0.73 R=+0.16  8019 us  30.2 fps  COASTING  alvo=(206,212) area=     0 erro=+0.287 L=+0.73 R=+0.16  7828 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7903 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7942 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7832 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7797 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7896 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7754 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7793 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7879 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8070 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7872 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7909 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7784 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7787 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7762 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7759 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7889 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7903 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7882 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7764 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7880 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8371 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8371 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7858 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  6916 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  6909 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  6890 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8969 us  30.0 fps  TRACKING  alvo=(184,158) area=   152 erro=+0.150 L=+0.67 R=+0.37  8960 us  30.1 fps  COASTING  alvo=(184,158) area=     0 erro=+0.150 L=+0.67 R=+0.37  1480 us  30.2 fps  COASTING  alvo=(184,158) area=     0 erro=+0.150 L=+0.67 R=+0.37  8926 us  30.0 fps  TRACKING  alvo=(187,160) area=   152 erro=+0.169 L=+0.68 R=+0.34  9435 us  30.1 fps  TRACKING  alvo=(188,160) area=   177 erro=+0.175 L=+0.68 R=+0.33  1466 us  30.2 fps  COASTING  alvo=(188,160) area=     0 erro=+0.175 L=+0.68 R=+0.33  1488 us  30.0 fps  COASTING  alvo=(188,160) area=     0 erro=+0.175 L=+0.68 R=+0.33  9004 us  30.1 fps  COASTING  alvo=(188,160) area=     0 erro=+0.175 L=+0.68 R=+0.33  9052 us  30.2 fps  TRACKING  alvo=(188,160) area=   150 erro=+0.175 L=+0.68 R=+0.33  8986 us  30.0 fps  TRACKING  alvo=(187,159) area=   171 erro=+0.169 L=+0.68 R=+0.34  1487 us  30.1 fps  TRACKING  alvo=(186,158) area=   161 erro=+0.162 L=+0.67 R=+0.35  1467 us  30.2 fps  TRACKING  alvo=(186,157) area=   164 erro=+0.162 L=+0.67 R=+0.35  1458 us  30.0 fps  TRACKING  alvo=(186,157) area=   163 erro=+0.162 L=+0.67 R=+0.35  1471 us  30.1 fps  COASTING  alvo=(185,157) area=     0 erro=+0.156 L=+0.67 R=+0.36  1484 us  30.2 fps  COASTING  alvo=(185,156) area=     0 erro=+0.156 L=+0.67 R=+0.36  10507 us  30.0 fps  TRACKING  alvo=(186,157) area=   160 erro=+0.162 L=+0.67 R=+0.35  10458 us  30.1 fps  TRACKING  alvo=(186,158) area=   158 erro=+0.162 L=+0.67 R=+0.35  1707 us  30.2 fps  TRACKING  alvo=(187,157) area=   168 erro=+0.169 L=+0.68 R=+0.34  1340 us  30.0 fps  COASTING  alvo=(187,157) area=     0 erro=+0.169 L=+0.68 R=+0.34  1285 us  30.1 fps  COASTING  alvo=(187,157) area=     0 erro=+0.169 L=+0.68 R=+0.34  7921 us  30.2 fps  COASTING  alvo=(187,157) area=     0 erro=+0.169 L=+0.68 R=+0.34  9109 us  30.0 fps  COASTING  alvo=(187,157) area=     0 erro=+0.169 L=+0.68 R=+0.34  8963 us  30.1 fps  COASTING  alvo=(187,157) area=     0 erro=+0.169 L=+0.68 R=+0.34  8895 us  30.2 fps  COASTING  alvo=(187,157) area=     0 erro=+0.169 L=+0.68 R=+0.34  7803 us  30.0 fps  TRACKING  alvo=(193,160) area=   165 erro=+0.206 L=+0.69 R=+0.28  7830 us  30.1 fps  TRACKING  alvo=(194,160) area=   160 erro=+0.213 L=+0.70 R=+0.27  1353 us  30.2 fps  COASTING  alvo=(194,161) area=     0 erro=+0.213 L=+0.70 R=+0.27  1460 us  30.0 fps  TRACKING  alvo=(194,161) area=   155 erro=+0.213 L=+0.70 R=+0.27  7882 us  30.1 fps  TRACKING  alvo=(194,160) area=   153 erro=+0.213 L=+0.70 R=+0.27  1306 us  30.2 fps  TRACKING  alvo=(194,160) area=   153 erro=+0.213 L=+0.70 R=+0.27  1482 us  30.0 fps  TRACKING  alvo=(194,160) area=   168 erro=+0.213 L=+0.70 R=+0.27  1498 us  30.1 fps  TRACKING  alvo=(194,160) area=   173 erro=+0.213 L=+0.70 R=+0.27  1503 us  30.2 fps  TRACKING  alvo=(194,161) area=   154 erro=+0.213 L=+0.70 R=+0.27  1739 us  30.0 fps  TRACKING  alvo=(193,161) area=   164 erro=+0.206 L=+0.69 R=+0.28  1714 us  30.1 fps  TRACKING  alvo=(192,161) area=   156 erro=+0.200 L=+0.69 R=+0.29  1713 us  30.2 fps  COASTING  alvo=(191,161) area=     0 erro=+0.194 L=+0.69 R=+0.30  1532 us  30.0 fps  TRACKING  alvo=(189,161) area=   162 erro=+0.181 L=+0.68 R=+0.32  8977 us  30.1 fps  TRACKING  alvo=(189,161) area=   163 erro=+0.181 L=+0.68 R=+0.32  1521 us  30.2 fps  TRACKING  alvo=(187,160) area=   158 erro=+0.169 L=+0.68 R=+0.34  1475 us  30.0 fps  TRACKING  alvo=(186,159) area=   178 erro=+0.162 L=+0.67 R=+0.35  1521 us  30.1 fps  TRACKING  alvo=(186,159) area=   150 erro=+0.162 L=+0.67 R=+0.35  1464 us  30.2 fps  COASTING  alvo=(185,158) area=     0 erro=+0.156 L=+0.67 R=+0.36  1716 us  30.0 fps  COASTING  alvo=(184,158) area=     0 erro=+0.150 L=+0.67 R=+0.37  10585 us  30.1 fps  COASTING  alvo=(184,158) area=     0 erro=+0.150 L=+0.67 R=+0.37  10376 us  30.2 fps  COASTING  alvo=(183,157) area=     0 erro=+0.144 L=+0.67 R=+0.38  8040 us  30.0 fps  COASTING  alvo=(182,157) area=     0 erro=+0.138 L=+0.66 R=+0.39  7788 us  30.1 fps  COASTING  alvo=(182,157) area=     0 erro=+0.138 L=+0.66 R=+0.39  7789 us  30.2 fps  COASTING  alvo=(181,156) area=     0 erro=+0.131 L=+0.66 R=+0.40  7898 us  30.0 fps  COASTING  alvo=(180,156) area=     0 erro=+0.125 L=+0.66 R=+0.41  7800 us  30.1 fps  COASTING  alvo=(180,156) area=     0 erro=+0.125 L=+0.66 R=+0.41  7877 us  30.2 fps  COASTING  alvo=(179,156) area=     0 erro=+0.119 L=+0.65 R=+0.42  7964 us  30.0 fps  COASTING  alvo=(178,155) area=     0 erro=+0.112 L=+0.65 R=+0.43  7895 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7781 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7889 us  30.0 fps  TRACKING  alvo=(186,149) area=   156 erro=+0.162 L=+0.67 R=+0.35  7794 us  30.1 fps  TRACKING  alvo=(186,149) area=   152 erro=+0.162 L=+0.67 R=+0.35  1301 us  30.2 fps  COASTING  alvo=(186,149) area=     0 erro=+0.162 L=+0.67 R=+0.35  1300 us  30.0 fps  TRACKING  alvo=(186,149) area=   153 erro=+0.162 L=+0.67 R=+0.35  9792 us  30.1 fps  TRACKING  alvo=(186,149) area=   151 erro=+0.162 L=+0.67 R=+0.35  1570 us  30.2 fps  COASTING  alvo=(186,149) area=     0 erro=+0.162 L=+0.67 R=+0.35  1488 us  30.0 fps  TRACKING  alvo=(186,149) area=   153 erro=+0.162 L=+0.67 R=+0.35  7817 us  30.1 fps  COASTING  alvo=(186,149) area=     0 erro=+0.162 L=+0.67 R=+0.35  1288 us  30.2 fps  TRACKING  alvo=(186,149) area=   158 erro=+0.162 L=+0.67 R=+0.35  8409 us  30.0 fps  TRACKING  alvo=(186,149) area=   156 erro=+0.162 L=+0.67 R=+0.35  1481 us  30.1 fps  TRACKING  alvo=(186,149) area=   156 erro=+0.162 L=+0.67 R=+0.35  1459 us  30.2 fps  TRACKING  alvo=(186,149) area=   153 erro=+0.162 L=+0.67 R=+0.35  1484 us  30.0 fps  COASTING  alvo=(186,149) area=     0 erro=+0.162 L=+0.67 R=+0.35  1474 us  30.1 fps  TRACKING  alvo=(185,149) area=   155 erro=+0.156 L=+0.67 R=+0.36  9019 us  30.2 fps  COASTING  alvo=(185,149) area=     0 erro=+0.156 L=+0.67 R=+0.36  1498 us  30.0 fps  COASTING  alvo=(185,149) area=     0 erro=+0.156 L=+0.67 R=+0.36  8992 us  30.1 fps  COASTING  alvo=(184,149) area=     0 erro=+0.150 L=+0.67 R=+0.37  9023 us  30.2 fps  COASTING  alvo=(184,149) area=     0 erro=+0.150 L=+0.67 R=+0.37  9564 us  30.0 fps  COASTING  alvo=(184,149) area=     0 erro=+0.150 L=+0.67 R=+0.37  7875 us  30.1 fps  COASTING  alvo=(184,149) area=     0 erro=+0.150 L=+0.67 R=+0.37  7775 us  30.2 fps  COASTING  alvo=(184,149) area=     0 erro=+0.150 L=+0.67 R=+0.37  7847 us  30.0 fps  COASTING  alvo=(184,149) area=     0 erro=+0.150 L=+0.67 R=+0.37  7769 us  30.1 fps  COASTING  alvo=(184,149) area=     0 erro=+0.150 L=+0.67 R=+0.37  7877 us  30.2 fps  COASTING  alvo=(184,149) area=     0 erro=+0.150 L=+0.67 R=+0.37  7825 us  30.0 fps  COASTING  alvo=(183,149) area=     0 erro=+0.144 L=+0.67 R=+0.38  7798 us  30.1 fps  COASTING  alvo=(183,149) area=     0 erro=+0.144 L=+0.67 R=+0.38  7832 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7871 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7901 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7786 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7767 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7837 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7788 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7783 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7796 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7782 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8513 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8349 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7818 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7783 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7784 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7837 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7841 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7811 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7772 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7897 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7900 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7789 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7937 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7856 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7837 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7754 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7972 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7887 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7866 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7747 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7834 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7794 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7878 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7847 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7759 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7744 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7804 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7787 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8999 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8918 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8922 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7803 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8196 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8280 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7884 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7871 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7909 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7752 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7821 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7820 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9095 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8993 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9096 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7829 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8120 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7883 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7873 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7882 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7772 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7804 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7776 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7807 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7816 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7871 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7833 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7803 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7808 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7836 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8916 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9038 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8967 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7896 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7833 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7808 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8270 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8430 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7912 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7928 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7907 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7794 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7935 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7890 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7969 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7794 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7791 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8115 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7786 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7861 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7837 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7865 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7849 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7963 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8654 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9218 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8961 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9040 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7833 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7754 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7768 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7778 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7855 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7787 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7844 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7821 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7787 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7784 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8478 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8276 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7873 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7784 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7825 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7921 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8071 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7976 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7860 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7784 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7793 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8900 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8979 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8925 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7869 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7895 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7825 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7956 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7809 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7803 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7799 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7804 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7813 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7773 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7847 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7794 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8928 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9025 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8932 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7861 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7810 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7771 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8303 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8251 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7837 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7844 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8041 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7834 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7958 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7828 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7844 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7853 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7937 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7820 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8954 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8896 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8996 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7834 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7866 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7844 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7838 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7855 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7785 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8906 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8896 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8900 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7831 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7819 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7788 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8871 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8920 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8954 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8063 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7801 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8115 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8299 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8017 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7784 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9014 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9173 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9198 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8058 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7886 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7778 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7801 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7786 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7831 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8678 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8971 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8959 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8370 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7777 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7793 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7879 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7813 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7743 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7932 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7816 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7829 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7934 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7839 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7910 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7872 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7793 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7821 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7808 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8693 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8294 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7952 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7803 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7809 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7844 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7880 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7807 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7887 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7799 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7824 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7887 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7984 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7840 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7878 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7828 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7925 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7767 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8974 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9018 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8938 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7928 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7775 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7829 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9024 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8910 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8929 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7911 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7753 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7846 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8187 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7768 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8542 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8296 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8079 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7851 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7983 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7847 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7818 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7814 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7894 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7901 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8154 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7814 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7795 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7746 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7830 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7770 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8869 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8851 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8902 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7821 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7782 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7766 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8032 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7820 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7801 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8930 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8908 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9100 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7950 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7802 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7882 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7836 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8420 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8439 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7921 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7853 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7871 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8772 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8892 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8908 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7985 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7883 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7831 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7809 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7808 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7870 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7941 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7795 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7856 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8410 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9096 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8933 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8595 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7901 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7865 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7907 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7759 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7763 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8021 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7819 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7794 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7844 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7882 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7975 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8347 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8186 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7879 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7862 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7838 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7835 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7832 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7823 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7857 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7804 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7770 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7784 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7838 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8896 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8915 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8960 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7853 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7806 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7856 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7802 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7824 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7821 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7833 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7820 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8182 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7872 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7827 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7821 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9088 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9059 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8918 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8987 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9400 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9383 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7961 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7808 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7911 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7894 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7910 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7866 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7786 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7750 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7855 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7814 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7805 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7848 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8925 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8957 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8942 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7807 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7846 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7820 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7772 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7828 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7864 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7906 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7887 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7803 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8815 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8981 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9106 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7939 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7854 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7816 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8196 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8336 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7978 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8124 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7864 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7876 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7772 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7764 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7867 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7859 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7783 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7827 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7807 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7805 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7795 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8018 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8045 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7908 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8667 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8931 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9237 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9152 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7848 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7812 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7867 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7846 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7899 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7850 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7803 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7846 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7813 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7836 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8247 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8535 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7974 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7914 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7828 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7882 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7854 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7805 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7808 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7868 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7823 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7795 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7823 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7815 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7903 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7796 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7794 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8916 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9336 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9030 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9507 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9038 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8912 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7883 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8003 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8128 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7847 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7815 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7861 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8891 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8909 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9021 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8342 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8218 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7901 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7802 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7814 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7880 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7819 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7806 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7785 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8941 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8956 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8955 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7911 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7852 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7840 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8905 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9224 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8943 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9045 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8963 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8946 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7956 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7785 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7919 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7816 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7784 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7811 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7866 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7801 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7903 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7974 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7883 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8239 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8229 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8007 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7892 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7786 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7793 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7823 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7899 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7816 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7820 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7943 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7934 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7845 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7912 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7911 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7798 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7818 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7810 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7790 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7924 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7861 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7905 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7918 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7782 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7854 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7784 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7853 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7837 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7853 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7854 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7779 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7755 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8156 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8392 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7874 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7868 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7919 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7787 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7786 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7817 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7804 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7906 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7923 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7896 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7906 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7863 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7834 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7792 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7862 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7874 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7849 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8140 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7872 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7848 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7779 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7805 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7806 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8090 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7885 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7825 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7856 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7781 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7791 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7788 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8208 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8434 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7940 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7876 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7819 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7794 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7845 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8099 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7925 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7840 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9123 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9035 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8968 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7773 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7804 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7786 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8885 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9151 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9014 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8110 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7849 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7850 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7798 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7775 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7828 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7890 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7828 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7826 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7891 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7807 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7848 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7867 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8176 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8605 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7879 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7791 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7783 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7773 us  30.0 fps  TRACKING  alvo=(186,172) area=   160 erro=+0.162 L=+0.67 R=+0.35  7851 us  30.1 fps  TRACKING  alvo=(185,171) area=   164 erro=+0.156 L=+0.67 R=+0.36  1293 us  30.2 fps  COASTING  alvo=(185,171) area=     0 erro=+0.156 L=+0.67 R=+0.36  1302 us  30.0 fps  COASTING  alvo=(185,171) area=     0 erro=+0.156 L=+0.67 R=+0.36  8941 us  30.1 fps  COASTING  alvo=(185,171) area=     0 erro=+0.156 L=+0.67 R=+0.36  8918 us  30.2 fps  COASTING  alvo=(185,171) area=     0 erro=+0.156 L=+0.67 R=+0.36  8949 us  30.0 fps  COASTING  alvo=(185,171) area=     0 erro=+0.156 L=+0.67 R=+0.36  7822 us  30.1 fps  COASTING  alvo=(185,171) area=     0 erro=+0.156 L=+0.67 R=+0.36  7783 us  30.2 fps  COASTING  alvo=(184,170) area=     0 erro=+0.150 L=+0.67 R=+0.37  7852 us  30.0 fps  TRACKING  alvo=(182,170) area=   150 erro=+0.138 L=+0.66 R=+0.39  7910 us  30.1 fps  COASTING  alvo=(182,170) area=     0 erro=+0.138 L=+0.66 R=+0.39  1341 us  30.2 fps  COASTING  alvo=(182,170) area=     0 erro=+0.138 L=+0.66 R=+0.39  7822 us  30.0 fps  COASTING  alvo=(182,170) area=     0 erro=+0.138 L=+0.66 R=+0.39  8978 us  30.1 fps  COASTING  alvo=(181,170) area=     0 erro=+0.131 L=+0.66 R=+0.40  8918 us  30.2 fps  COASTING  alvo=(181,170) area=     0 erro=+0.131 L=+0.66 R=+0.40  8888 us  30.0 fps  COASTING  alvo=(181,170) area=     0 erro=+0.131 L=+0.66 R=+0.40  7785 us  30.1 fps  COASTING  alvo=(181,170) area=     0 erro=+0.131 L=+0.66 R=+0.40  7859 us  30.2 fps  COASTING  alvo=(180,170) area=     0 erro=+0.125 L=+0.66 R=+0.41  7827 us  30.0 fps  COASTING  alvo=(180,170) area=     0 erro=+0.125 L=+0.66 R=+0.41  7771 us  30.1 fps  COASTING  alvo=(180,170) area=     0 erro=+0.125 L=+0.66 R=+0.41  7834 us  30.2 fps  COASTING  alvo=(180,170) area=     0 erro=+0.125 L=+0.66 R=+0.41  7839 us  30.0 fps  COASTING  alvo=(179,170) area=     0 erro=+0.119 L=+0.65 R=+0.42  7776 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7876 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7811 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9033 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8968 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9578 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9488 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9193 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9004 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  6942 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  6948 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  6961 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7877 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7971 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7880 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7850 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7860 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7785 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7926 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7997 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7768 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7834 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7753 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7792 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8912 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8966 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8961 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7804 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7809 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7794 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7784 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7769 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7817 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7925 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7785 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7835 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8849 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9148 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9473 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8445 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7850 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8302 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7845 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7877 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7797 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7796 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8164 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7826 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7803 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7794 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7825 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7791 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7773 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7764 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7969 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7923 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7797 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8434 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9031 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8974 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8584 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7773 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7820 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7907 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7827 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7803 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7794 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7788 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7727 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8130 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8380 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8441 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7909 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  6924 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  6903 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  6944 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8981 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8959 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9066 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7774 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7891 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7878 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7799 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7821 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7808 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7943 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7953 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7783 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9037 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8924 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8989 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7902 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7741 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7870 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8953 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8889 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8896 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7828 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7824 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7895 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7823 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8215 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8394 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8365 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7790 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7859 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7865 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7780 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7888 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7780 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7785 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7830 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7796 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7809 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7845 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7825 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7911 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7783 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7822 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7858 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7803 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7751 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7819 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7820 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7780 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7780 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7833 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7882 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7911 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7752 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7856 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8060 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7821 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7844 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8363 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8241 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7854 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7782 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7948 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8277 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8897 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8972 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8348 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7793 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7884 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7766 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7789 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7943 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7952 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7813 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7783 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7839 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7787 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7837 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7831 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7776 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7776 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7821 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8910 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8859 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8988 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8246 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7866 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7806 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7779 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7795 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8334 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8371 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7874 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7794 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7752 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7783 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7870 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7815 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7795 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7801 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9066 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8957 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8947 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7833 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7900 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7885 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7854 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7850 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7853 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7867 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7827 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7785 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7833 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7769 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7811 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8079 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7919 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7912 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7927 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7859 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7794 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7853 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8390 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8243 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7886 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7823 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7929 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8985 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8964 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8865 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8000 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7856 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7771 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8962 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9027 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8939 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7997 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7904 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7772 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7852 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7822 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7848 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7834 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7910 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7837 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8063 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7880 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7916 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7889 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7819 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7786 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7837 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7969 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7823 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8436 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8261 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7772 us  29.9 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7974 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7779 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7785 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7887 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7846 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7797 us  29.9 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7989 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7834 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7897 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7802 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8068 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7798 us  29.9 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7811 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7802 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7823 us  30.3 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7869 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7780 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8084 us  29.9 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8234 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7868 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7798 us  30.3 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7776 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7808 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7915 us  29.9 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7818 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7869 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7765 us  30.3 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7843 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7877 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8347 us  29.9 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8233 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7926 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7905 us  30.3 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7865 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7880 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7840 us  29.9 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7781 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7773 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7804 us  30.3 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7829 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8058 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7849 us  29.9 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7829 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7817 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7838 us  30.3 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7779 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7868 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7815 us  29.9 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8094 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7840 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7864 us  30.3 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7733 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7869 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7824 us  29.9 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7804 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8985 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8952 us  30.3 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8954 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7869 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7828 us  29.9 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7926 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8796 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8329 us  30.3 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7880 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7842 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7839 us  29.9 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7797 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7812 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7760 us  30.3 fps  TRACKING  alvo=(178,166) area=   218 erro=+0.112 L=+0.65 R=+0.43  7845 us  30.0 fps  TRACKING  alvo=(178,165) area=   230 erro=+0.112 L=+0.65 R=+0.43  1632 us  30.1 fps  TRACKING  alvo=(177,164) area=   236 erro=+0.106 L=+0.65 R=+0.44  1608 us  29.9 fps  TRACKING  alvo=(177,163) area=   223 erro=+0.106 L=+0.65 R=+0.44  1667 us  30.0 fps  TRACKING  alvo=(178,162) area=   224 erro=+0.112 L=+0.65 R=+0.43  1614 us  30.2 fps  TRACKING  alvo=(179,161) area=   200 erro=+0.119 L=+0.65 R=+0.42  1579 us  30.3 fps  TRACKING  alvo=(180,159) area=   215 erro=+0.125 L=+0.66 R=+0.41  1530 us  30.0 fps  TRACKING  alvo=(181,159) area=   222 erro=+0.131 L=+0.66 R=+0.40  1562 us  30.1 fps  TRACKING  alvo=(181,159) area=   208 erro=+0.131 L=+0.66 R=+0.40  1537 us  29.9 fps  TRACKING  alvo=(180,158) area=   221 erro=+0.125 L=+0.66 R=+0.41  1588 us  30.0 fps  TRACKING  alvo=(179,158) area=   227 erro=+0.119 L=+0.65 R=+0.42  1586 us  30.2 fps  TRACKING  alvo=(178,159) area=   195 erro=+0.112 L=+0.65 R=+0.43  1535 us  30.3 fps  TRACKING  alvo=(176,160) area=   185 erro=+0.100 L=+0.65 R=+0.45  1564 us  30.0 fps  TRACKING  alvo=(174,161) area=   209 erro=+0.087 L=+0.64 R=+0.47  1637 us  30.1 fps  TRACKING  alvo=(172,161) area=   229 erro=+0.075 L=+0.63 R=+0.48  1859 us  29.9 fps  TRACKING  alvo=(172,162) area=   205 erro=+0.075 L=+0.63 R=+0.48  1866 us  30.0 fps  TRACKING  alvo=(171,163) area=   177 erro=+0.069 L=+0.63 R=+0.49  1741 us  30.2 fps  TRACKING  alvo=(170,163) area=   164 erro=+0.062 L=+0.63 R=+0.50  1516 us  30.3 fps  COASTING  alvo=(169,163) area=     0 erro=+0.056 L=+0.63 R=+0.51  1513 us  30.0 fps  COASTING  alvo=(168,164) area=     0 erro=+0.050 L=+0.62 R=+0.52  10433 us  30.1 fps  COASTING  alvo=(167,164) area=     0 erro=+0.044 L=+0.62 R=+0.53  10422 us  29.9 fps  COASTING  alvo=(166,165) area=     0 erro=+0.038 L=+0.62 R=+0.54  10522 us  30.0 fps  COASTING  alvo=(165,165) area=     0 erro=+0.031 L=+0.61 R=+0.55  8089 us  30.1 fps  COASTING  alvo=(164,165) area=     0 erro=+0.025 L=+0.61 R=+0.56  7830 us  30.3 fps  COASTING  alvo=(163,166) area=     0 erro=+0.019 L=+0.61 R=+0.57  8555 us  30.0 fps  COASTING  alvo=(162,166) area=     0 erro=+0.013 L=+0.61 R=+0.58  8394 us  30.1 fps  COASTING  alvo=(161,166) area=     0 erro=+0.006 L=+0.60 R=+0.59  7840 us  29.9 fps  COASTING  alvo=(160,167) area=     0 erro=+0.000 L=+0.60 R=+0.60  7824 us  30.0 fps  COASTING  alvo=(159,167) area=     0 erro=-0.006 L=+0.59 R=+0.60  7839 us  30.2 fps  COASTING  alvo=(158,167) area=     0 erro=-0.013 L=+0.58 R=+0.61  7794 us  30.3 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7767 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7878 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7800 us  29.9 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7820 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7977 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7939 us  30.3 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7892 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7856 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7782 us  29.9 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8087 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8419 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8980 us  30.3 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9017 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9118 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7829 us  29.9 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8013 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7934 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7850 us  30.3 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7816 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7745 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7740 us  29.9 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7763 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8046 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9058 us  30.3 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8978 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9227 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8507 us  29.9 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8303 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7912 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7821 us  30.3 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7798 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7830 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7772 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7743 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7804 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9009 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8932 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9142 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7864 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8374 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7934 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8176 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7772 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7799 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7785 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7814 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7864 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8061 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7811 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7808 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7791 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7788 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7850 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8968 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9036 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9320 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7820 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7843 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8362 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8079 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7913 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7840 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7812 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7786 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7858 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7773 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7813 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7883 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7998 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8146 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8064 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7994 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7829 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7751 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7775 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7798 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7857 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7863 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7800 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7812 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7801 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7876 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7853 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7799 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7789 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7848 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7889 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7863 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7793 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8378 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9673 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9514 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7973 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7031 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  6961 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  6903 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7793 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7805 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7791 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8184 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8047 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7974 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7783 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7813 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7816 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9011 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8953 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8946 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7768 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7821 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7801 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7793 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7792 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7749 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7789 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7813 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7874 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7916 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7878 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7851 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9027 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8915 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9269 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8300 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7878 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7768 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7789 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7739 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7799 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9180 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9048 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9028 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7810 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7803 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7860 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7823 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7853 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7799 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7750 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7786 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7794 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7948 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7778 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7865 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7820 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7842 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7885 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7907 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7834 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7818 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7859 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7832 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7831 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7847 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8270 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8410 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7813 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7791 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7826 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9381 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9034 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9029 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7839 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7802 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7811 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9074 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  9008 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8996 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7977 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7819 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7788 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7766 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7805 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7765 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7784 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7794 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7912 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7935 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7800 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7827 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7910 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7902 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7852 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7953 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7774 us  30.1 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  7863 us  30.2 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8385 us  30.0 fps  SEARCHING alvo=(  0,  0) area=     0 erro=+0.000 L=+0.35 R=-0.35  8143 us  30.1 fps  
+log gravado em /home/pedro/ecv/out/cam.csv
+1351 frames · 76 com detecção (6%) · latência média 7678.8 us (pior 10585 us)
+faixa final:  --range 170,10,120,255,60,255  --min-area 150
+
+===== [270s] T5 — robô completo com câmera (dry-run) por 45s
+rodando 320x240 em /dev/video0 (log)
+[motor] L=+0.558 R=+0.711
+[motor] L=+0.503 R=+0.738
+[motor] L=+0.488 R=+0.742
+[motor] L=+0.485 R=+0.740
+[motor] L=+0.524 R=+0.717
+[motor] L=+0.589 R=+0.685
+[motor] L=+0.685 R=+0.643
+[motor] L=+0.764 R=+0.563
+[motor] L=+0.802 R=+0.461
+[motor] L=+0.838 R=+0.349
+[motor] L=+0.875 R=+0.236
+[motor] L=+0.897 R=-0.250
+[motor] L=+0.919 R=-0.342
+[motor] L=+0.924 R=-0.396
+[motor] L=+0.906 R=-0.400
+[motor] L=+0.887 R=-0.391
+[motor] L=+0.855 R=-0.348
+[motor] L=+0.812 R=-0.273
+[motor] L=+0.754 R=+0.250
+[motor] L=+0.677 R=+0.418
+[motor] L=+0.581 R=+0.644
+[motor] L=+0.515 R=+0.839
+[motor] L=+0.390 R=+0.878
+[motor] L=+0.304 R=+0.889
+[motor] L=+0.238 R=+0.889
+[motor] L=+0.247 R=+0.859
+[motor] L=+0.285 R=+0.821
+[motor] L=+0.371 R=+0.768
+[motor] L=+0.486 R=+0.707
+[motor] L=+0.638 R=+0.635
+[motor] L=+0.714 R=+0.613
+[motor] L=+0.777 R=+0.556
+[motor] L=+0.742 R=+0.591
+[motor] L=+0.721 R=+0.612
+[motor] L=+0.702 R=+0.636
+[motor] L=+0.685 R=+0.664
+[motor] L=+0.679 R=+0.675
+[motor] L=+0.675 R=+0.685
+[motor] L=+0.655 R=+0.694
+[motor] L=+0.649 R=+0.695
+[motor] L=+0.653 R=+0.691
+[motor] L=+0.644 R=+0.694
+[motor] L=+0.636 R=+0.697
+[motor] L=+0.628 R=+0.699
+[motor] L=+0.632 R=+0.696
+[motor] L=+0.769 R=+0.515
+[motor] L=+0.755 R=+0.519
+[motor] L=+0.697 R=+0.614
+[motor] L=+0.661 R=+0.688
+[motor] L=+0.615 R=+0.723
+[motor] L=+0.586 R=+0.731
+[motor] L=+0.579 R=+0.727
+[motor] L=+0.580 R=+0.721
+[motor] L=+0.588 R=+0.712
+[motor] L=+0.593 R=+0.707
+[motor] L=+0.607 R=+0.699
+[motor] L=+0.608 R=+0.698
+[motor] L=+0.618 R=+0.693
+[motor] L=+0.617 R=+0.694
+[motor] L=+0.616 R=+0.695
+[motor] L=+0.669 R=+0.670
+[motor] L=+0.722 R=+0.622
+[motor] L=+0.702 R=+0.647
+[motor] L=+0.684 R=+0.676
+[motor] L=+0.672 R=+0.683
+[motor] L=+0.661 R=+0.688
+[motor] L=+0.652 R=+0.691
+[motor] L=+0.644 R=+0.695
+[motor] L=+0.636 R=+0.697
+[motor] L=+0.639 R=+0.694
+[motor] L=+0.652 R=+0.686
+[motor] L=+0.652 R=+0.687
+[motor] L=+0.651 R=+0.687
+[motor] L=+0.651 R=+0.687
+[motor] L=+0.640 R=+0.693
+[motor] L=+0.803 R=+0.444
+[motor] L=+0.830 R=+0.358
+[motor] L=+0.765 R=+0.449
+[motor] L=+0.699 R=+0.569
+[motor] L=+0.643 R=+0.685
+[motor] L=+0.596 R=+0.748
+[motor] L=+0.547 R=+0.759
+[motor] L=+0.528 R=+0.757
+[motor] L=+0.526 R=+0.747
+[motor] L=+0.542 R=+0.732
+[motor] L=+0.551 R=+0.723
+[motor] L=+0.567 R=+0.712
+[motor] L=+0.580 R=+0.705
+[motor] L=+0.591 R=+0.699
+[motor] L=+0.655 R=+0.668
+[motor] L=+0.723 R=+0.631
+[motor] L=+0.796 R=+0.473
+[motor] L=+0.861 R=+0.310
+[motor] L=+0.907 R=-0.233
+[motor] L=+0.943 R=-0.355
+[motor] L=+0.954 R=-0.431
+[motor] L=+0.949 R=-0.475
+[motor] L=+0.928 R=-0.476
+[motor] L=+0.897 R=-0.444
+[motor] L=+0.857 R=-0.383
+[motor] L=+0.790 R=-0.257
+[motor] L=+0.731 R=+0.273
+[motor] L=+0.671 R=+0.425
+[motor] L=+0.599 R=+0.605
+[motor] L=+0.519 R=+0.814
+[motor] L=+0.361 R=+0.896
+[motor] L=-0.207 R=+0.946
+[motor] L=-0.316 R=+0.963
+[motor] L=-0.382 R=+0.958
+[motor] L=-0.624 R=+1.000
+[motor] L=-0.745 R=+1.000
+[motor] L=-0.791 R=+1.000
+[motor] L=-0.788 R=+1.000
+[motor] L=-0.758 R=+0.983
+[motor] L=-0.682 R=+0.934
+[motor] L=-0.620 R=+0.899
+[motor] L=-0.557 R=+0.869
+[motor] L=-0.515 R=+0.854
+[motor] L=-0.474 R=+0.840
+[motor] L=-0.456 R=+0.838
+[motor] L=-0.438 R=+0.837
+[motor] L=-0.439 R=+0.843
+[motor] L=-0.426 R=+0.841
+[motor] L=-0.435 R=+0.849
+[motor] L=-0.440 R=+0.854
+[motor] L=-0.443 R=+0.857
+[motor] L=-0.445 R=+0.859
+[motor] L=-0.446 R=+0.860
+[motor] L=-0.446 R=+0.861
+[motor] L=-0.457 R=+0.866
+[motor] L=-0.445 R=+0.860
+[motor] L=-0.457 R=+0.866
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.453 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.443 R=+0.858
+[motor] L=-0.434 R=+0.854
+[motor] L=-0.437 R=+0.857
+[motor] L=-0.438 R=+0.858
+[motor] L=-0.439 R=+0.859
+[motor] L=-0.450 R=+0.865
+[motor] L=-0.449 R=+0.864
+[motor] L=-0.448 R=+0.863
+[motor] L=-0.448 R=+0.862
+[motor] L=-0.448 R=+0.862
+[motor] L=-0.447 R=+0.862
+[motor] L=-0.458 R=+0.867
+[motor] L=-0.446 R=+0.860
+[motor] L=-0.446 R=+0.861
+[motor] L=-0.458 R=+0.867
+[motor] L=-0.456 R=+0.866
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.444 R=+0.858
+[motor] L=-0.445 R=+0.860
+[motor] L=-0.446 R=+0.861
+[motor] L=-0.446 R=+0.861
+[motor] L=-0.458 R=+0.867
+[motor] L=-0.456 R=+0.866
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.444 R=+0.858
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.453 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.453 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.444 R=+0.858
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.464 R=+0.868
+[motor] L=-0.452 R=+0.862
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.444 R=+0.858
+[motor] L=-0.445 R=+0.860
+[motor] L=-0.457 R=+0.866
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.464 R=+0.868
+[motor] L=-0.452 R=+0.861
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.443 R=+0.858
+[motor] L=-0.455 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.464 R=+0.868
+[motor] L=-0.463 R=+0.867
+[motor] L=-0.451 R=+0.861
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.453 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.464 R=+0.868
+[motor] L=-0.463 R=+0.867
+[motor] L=-0.462 R=+0.866
+[motor] L=-0.462 R=+0.866
+[motor] L=-0.451 R=+0.860
+[motor] L=-0.452 R=+0.862
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.444 R=+0.858
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.466 R=+0.869
+[motor] L=-0.453 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.443 R=+0.858
+[motor] L=-0.445 R=+0.860
+[motor] L=-0.456 R=+0.866
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.444 R=+0.858
+[motor] L=-0.445 R=+0.860
+[motor] L=-0.435 R=+0.855
+[motor] L=-0.437 R=+0.857
+[motor] L=-0.438 R=+0.858
+[motor] L=-0.439 R=+0.859
+[motor] L=-0.450 R=+0.865
+[motor] L=-0.449 R=+0.864
+[motor] L=-0.448 R=+0.863
+[motor] L=-0.459 R=+0.868
+[motor] L=-0.457 R=+0.866
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.453 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.443 R=+0.858
+[motor] L=-0.445 R=+0.859
+[motor] L=-0.457 R=+0.866
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.444 R=+0.859
+[motor] L=-0.445 R=+0.860
+[motor] L=-0.457 R=+0.866
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.444 R=+0.859
+[motor] L=-0.445 R=+0.860
+[motor] L=-0.457 R=+0.866
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.443 R=+0.858
+[motor] L=-0.445 R=+0.860
+[motor] L=-0.456 R=+0.866
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.443 R=+0.858
+[motor] L=-0.445 R=+0.860
+[motor] L=-0.457 R=+0.866
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.443 R=+0.858
+[motor] L=-0.455 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.444 R=+0.858
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.865
+[motor] L=-0.466 R=+0.869
+[motor] L=-0.464 R=+0.868
+[motor] L=-0.452 R=+0.861
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.444 R=+0.858
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.453 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.443 R=+0.858
+[motor] L=-0.455 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.443 R=+0.858
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.444 R=+0.858
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.443 R=+0.858
+[motor] L=-0.445 R=+0.860
+[motor] L=-0.457 R=+0.866
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.444 R=+0.858
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.443 R=+0.858
+[motor] L=-0.445 R=+0.860
+[motor] L=-0.457 R=+0.866
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.443 R=+0.858
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.443 R=+0.858
+[motor] L=-0.455 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.443 R=+0.858
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.443 R=+0.858
+[motor] L=-0.445 R=+0.860
+[motor] L=-0.446 R=+0.860
+[motor] L=-0.446 R=+0.861
+[motor] L=-0.447 R=+0.861
+[motor] L=-0.457 R=+0.867
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.464 R=+0.867
+[motor] L=-0.452 R=+0.861
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.443 R=+0.857
+[motor] L=-0.455 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.444 R=+0.858
+[motor] L=-0.445 R=+0.860
+[motor] L=-0.446 R=+0.861
+[motor] L=-0.446 R=+0.861
+[motor] L=-0.458 R=+0.867
+[motor] L=-0.456 R=+0.866
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.444 R=+0.858
+[motor] L=-0.445 R=+0.860
+[motor] L=-0.435 R=+0.855
+[motor] L=-0.437 R=+0.857
+[motor] L=-0.438 R=+0.858
+[motor] L=-0.439 R=+0.859
+[motor] L=-0.450 R=+0.865
+[motor] L=-0.449 R=+0.864
+[motor] L=-0.448 R=+0.863
+[motor] L=-0.459 R=+0.868
+[motor] L=-0.457 R=+0.866
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.466 R=+0.869
+[motor] L=-0.464 R=+0.868
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.464 R=+0.868
+[motor] L=-0.463 R=+0.867
+[motor] L=-0.452 R=+0.861
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.444 R=+0.858
+[motor] L=-0.445 R=+0.860
+[motor] L=-0.435 R=+0.855
+[motor] L=-0.437 R=+0.857
+[motor] L=-0.449 R=+0.864
+[motor] L=-0.448 R=+0.863
+[motor] L=-0.458 R=+0.868
+[motor] L=-0.457 R=+0.866
+[motor] L=-0.467 R=+0.871
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.443 R=+0.858
+[motor] L=-0.445 R=+0.860
+[motor] L=-0.446 R=+0.860
+[motor] L=-0.457 R=+0.867
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.865
+[motor] L=-0.466 R=+0.870
+[motor] L=-0.464 R=+0.868
+[motor] L=-0.463 R=+0.867
+[motor] L=-0.452 R=+0.861
+[motor] L=-0.442 R=+0.856
+[motor] L=-0.444 R=+0.859
+[motor] L=-0.445 R=+0.860
+[motor] L=-0.435 R=+0.855
+[motor] L=-0.437 R=+0.857
+[motor] L=-0.449 R=+0.864
+[motor] L=-0.448 R=+0.863
+[motor] L=-0.448 R=+0.863
+[motor] L=-0.448 R=+0.862
+[motor] L=-0.458 R=+0.868
+[motor] L=-0.457 R=+0.866
+[motor] L=-0.467 R=+0.871
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.463 R=+0.867
+[motor] L=-0.463 R=+0.867
+[motor] L=-0.451 R=+0.861
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.443 R=+0.858
+[motor] L=-0.445 R=+0.860
+[motor] L=-0.446 R=+0.860
+[motor] L=-0.446 R=+0.861
+[motor] L=-0.436 R=+0.856
+[motor] L=-0.449 R=+0.863
+[motor] L=-0.437 R=+0.857
+[motor] L=-0.449 R=+0.863
+[motor] L=-0.448 R=+0.863
+[motor] L=-0.448 R=+0.862
+[motor] L=-0.448 R=+0.862
+[motor] L=-0.458 R=+0.868
+[motor] L=-0.457 R=+0.866
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.444 R=+0.858
+[motor] L=-0.445 R=+0.860
+[motor] L=-0.446 R=+0.861
+[motor] L=-0.435 R=+0.855
+[motor] L=-0.448 R=+0.863
+[motor] L=-0.448 R=+0.862
+[motor] L=-0.448 R=+0.862
+[motor] L=-0.447 R=+0.862
+[motor] L=-0.458 R=+0.867
+[motor] L=-0.456 R=+0.866
+[motor] L=-0.467 R=+0.870
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.453 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.453 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.464 R=+0.867
+[motor] L=-0.463 R=+0.867
+[motor] L=-0.462 R=+0.866
+[motor] L=-0.462 R=+0.866
+[motor] L=-0.451 R=+0.860
+[motor] L=-0.452 R=+0.862
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.443 R=+0.858
+[motor] L=-0.445 R=+0.859
+[motor] L=-0.446 R=+0.860
+[motor] L=-0.446 R=+0.861
+[motor] L=-0.447 R=+0.861
+[motor] L=-0.447 R=+0.861
+[motor] L=-0.447 R=+0.862
+[motor] L=-0.447 R=+0.862
+[motor] L=-0.447 R=+0.862
+[motor] L=-0.458 R=+0.867
+[motor] L=-0.457 R=+0.866
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.466 R=+0.870
+[motor] L=-0.464 R=+0.868
+[motor] L=-0.463 R=+0.867
+[motor] L=-0.463 R=+0.866
+[motor] L=-0.452 R=+0.861
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.453 R=+0.863
+[motor] L=-0.464 R=+0.868
+[motor] L=-0.463 R=+0.867
+[motor] L=-0.463 R=+0.866
+[motor] L=-0.462 R=+0.866
+[motor] L=-0.451 R=+0.860
+[motor] L=-0.452 R=+0.862
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.465 R=+0.868
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.453 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.464 R=+0.867
+[motor] L=-0.452 R=+0.861
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.453 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.464 R=+0.868
+[motor] L=-0.463 R=+0.867
+[motor] L=-0.462 R=+0.866
+[motor] L=-0.462 R=+0.866
+[motor] L=-0.462 R=+0.866
+[motor] L=-0.462 R=+0.866
+[motor] L=-0.462 R=+0.866
+[motor] L=-0.462 R=+0.865
+[motor] L=-0.462 R=+0.865
+[motor] L=-0.462 R=+0.865
+[motor] L=-0.451 R=+0.860
+[motor] L=-0.452 R=+0.862
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.443 R=+0.857
+[motor] L=-0.445 R=+0.859
+[motor] L=-0.457 R=+0.866
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.444 R=+0.859
+[motor] L=-0.445 R=+0.860
+[motor] L=-0.446 R=+0.861
+[motor] L=-0.446 R=+0.861
+[motor] L=-0.447 R=+0.861
+[motor] L=-0.447 R=+0.862
+[motor] L=-0.447 R=+0.862
+[motor] L=-0.447 R=+0.862
+[motor] L=-0.458 R=+0.867
+[motor] L=-0.457 R=+0.866
+[motor] L=-0.456 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.464 R=+0.868
+[motor] L=-0.463 R=+0.867
+[motor] L=-0.452 R=+0.861
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.464 R=+0.868
+[motor] L=-0.452 R=+0.861
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.443 R=+0.858
+[motor] L=-0.455 R=+0.865
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.455 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.453 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.464 R=+0.867
+[motor] L=-0.463 R=+0.867
+[motor] L=-0.462 R=+0.866
+[motor] L=-0.462 R=+0.866
+[motor] L=-0.451 R=+0.860
+[motor] L=-0.452 R=+0.862
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.443 R=+0.858
+[motor] L=-0.445 R=+0.860
+[motor] L=-0.446 R=+0.860
+[motor] L=-0.446 R=+0.861
+[motor] L=-0.447 R=+0.861
+[motor] L=-0.458 R=+0.867
+[motor] L=-0.456 R=+0.866
+[motor] L=-0.466 R=+0.870
+[motor] L=-0.453 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.863
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.454 R=+0.864
+[motor] L=-0.465 R=+0.869
+[motor] L=-0.464 R=+0.868
+[motor] L=-0.452 R=+0.861
+[motor] L=-0.453 R=+0.862
+[motor] L=-0.454 R=+0.863
+[motor] L=+0.000 R=+0.000
+[motor] L=+0.000 R=+0.000
+
+1348 frames · latência de visão média 2278.9 us (pior 9156 us)
+
+===== [315s] T6 — resfriamento 30s
+
+===== [345s] fim — encerrado
+--- throttled final ---
+throttled=0x0
+--- temperatura final ---
+56.9 C
+
+==> dados em /home/pedro/ecv/out/
+total 868
+drwxrwxr-x 2 pedro pedro   4096 Aug 26 10:29 .
+drwxr-xr-x 5 pedro pedro   4096 Aug 26 10:25 ..
+-rw-rw-r-- 1 pedro pedro 101967 Aug 26 10:30 cam.csv
+-rw-rw-r-- 1 pedro pedro    364 Aug 26 10:31 events.csv
+-rw-rw-r-- 1 pedro pedro 224638 Aug 26 10:28 frames.csv
+-rw-rw-r-- 1 pedro pedro 159935 Aug 26 10:31 run.log
+-rw-rw-r-- 1 pedro pedro 159935 Aug 26 10:31 stress.log
+-rw-rw-r-- 1 pedro pedro  30633 Aug 26 10:29 summary-contended.json
+-rw-rw-r-- 1 pedro pedro  30504 Aug 26 10:28 summary.json
+-rw-rw-r-- 1 pedro pedro 141425 Aug 26 10:29 summary-worst.json
+-rw-rw-r-- 1 pedro pedro  10883 Aug 26 10:31 telemetry.csv

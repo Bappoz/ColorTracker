@@ -1,0 +1,10 @@
+t_s,phase,event
+0,setup,contexto
+1,T0,baseline ocioso 20s
+21,T1,soak completo por fases + varredura de resolução
+130,T2,pior caso 640x480 sustentado (alvo perdido = varredura total)
+205,T3,visão com os outros 3 núcleos saturados
+224,T4,câmera real headless por 45s
+270,T5,robô completo com câmera (dry-run) por 45s
+315,T6,resfriamento 30s
+345,fim,encerrado

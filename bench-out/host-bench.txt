@@ -1,0 +1,20 @@
+ECV bench — 320x240, 500 frames, formato 2
+Footprint estático de SumoStorage<320,240>: 98116 B (máscara 76800 B + LUT 8193 B + workspace 13123 B)
+
+Estágios isolados (frame cheio):
+  convert+threshold (HSV)        1327.6 us        753 Hz
+  convert+threshold (LUT)          98.9 us      10110 Hz
+  ganho da LUT                     13.4x  (tabela montada em 630 us, uma vez)
+  morfologia (abertura)           196.2 us       5098 Hz
+  blobs (CCL)                      85.1 us      11748 Hz
+
+Pipeline completo:
+  threshold                        23.5 us      42604 Hz
+  morphology                       87.6 us      11418 Hz
+  blobs                            16.0 us      62438 Hz
+  track                             0.1 us   10204082 Hz
+  control                           0.1 us   16129032 Hz
+
+  frames em varredura total : 1 (média 576.0 us)
+  frames com ROI dinâmica   : 499 (média 126.6 us, pior caso 193 us)
+  ganho da ROI              : 4.6x
